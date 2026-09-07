@@ -1,0 +1,12 @@
+# Don't commit the one-time setup script once you've used it
+install.php
+
+# OS/editor junk
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# Local env/config overrides (keep config.php itself, but ignore any personal copy)
+config.local.php
