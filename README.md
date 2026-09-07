@@ -39,12 +39,32 @@ A complete, ready-to-run **PHP + MySQL** pharmacy management system.
 
 4. **Check your DB credentials** in `config.php` (defaults already match standard XAMPP: host `localhost`, user `root`, no password). Change if your MySQL setup is different.
 
-5. **Create your admin login** — open this URL in your browser **once**:
+5. **Create your admin login** — you have two options:
+
+   **Option A — using `install.php` (easiest, if you have the file locally):**
+   Open this URL in your browser **once**:
    ```
    http://localhost/pharmacy_management_system/install.php
    ```
    Fill in a username/password (defaults: `admin` / `admin123`) and submit.
-   ⚠️ **Delete `install.php` afterward** for security — it won't run again once a user exists anyway.
+   ⚠️ **Delete `install.php` afterward** for security — it won't run again once a user exists anyway. (This is why it's excluded from the public GitHub repo — it's a one-time local tool, not something to keep live.)
+
+   **Option B — manually via phpMyAdmin (use this if you don't have `install.php`, e.g. cloned this from GitHub):**
+   1. Open a terminal/command prompt and generate a secure password hash using PHP itself:
+      ```
+      php -r "echo password_hash('YourChosenPassword', PASSWORD_BCRYPT);"
+      ```
+      (On XAMPP/Windows, `php.exe` is usually at `C:\xampp\php\php.exe` — either add it to your PATH or run the full path, e.g. `C:\xampp\php\php.exe -r "echo password_hash('YourChosenPassword', PASSWORD_BCRYPT);"`)
+      This prints a hash like `$2y$10$abcdefg.......................`
+   2. Open **phpMyAdmin** → select the `pharmacy_db` database → open the `users` table → click **Insert**.
+   3. Fill in the row:
+      - `username`: your chosen username (e.g. `admin`)
+      - `password_hash`: paste the full hash string from step 1
+      - `full_name`: your name
+      - `role`: `admin`
+      - Leave `id` and `created_at` on their defaults.
+   4. Click **Go** to save.
+   ⚠️ Never type your plain password directly into the `password_hash` column — always paste the hashed output from `password_hash()`, never the raw password.
 
 6. **Log in**:
    ```
@@ -81,7 +101,7 @@ You're ready to go!
 pharmacy_management_system/
 ├── sql/schema.sql              ← import this into MySQL first
 ├── config.php                  ← DB connection settings
-├── install.php                 ← run once to create admin login, then delete
+├── install.php                 ← (local use only — not published to GitHub) run once to create admin login, then delete
 ├── login.php / logout.php
 ├── index.php                   ← dashboard
 ├── categories.php               ← medicine classifications
